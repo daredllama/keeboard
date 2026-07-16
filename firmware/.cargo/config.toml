@@ -1,1 +1,13 @@
+[target.'cfg(all(target_arch = "arm", target_os = "none"))']
+linker = "flip-link"
+# runner = "probe-rs run --chip rp2040" # Use this instead if you have a debug probe
+runner = "elf2uf2-rs -d" # Flashes via USB/BOOTSEL, no debug probe needed
+rustflags = []
 
+[build]
+# TODO: Pick a correct compilation target for your microcontroller
+target = "thumbv6m-none-eabi"
+
+[env]
+# TODO: set DEFMT_LOG to "error" to reduce the binary size
+DEFMT_LOG = "info"
