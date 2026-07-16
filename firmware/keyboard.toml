@@ -1,35 +1,70 @@
-# Documentation: https://rmk.rs/docs/configuration.html
 [keyboard]
-name = "RMK Keyboard"
-product_name = "RMK Keyboard"
-vendor_id = 0x4c4b
-product_id = 0x4643
-manufacturer = "RMK"
+name = "Custom F75"
+product_name = "Custom F75"
+vendor_id = 0x4653
+product_id = 0x0001
+manufacturer = "Prayag"
 chip = "rp2040"
 
 [matrix]
-# Row and col pins are mandatory
-row_pins = ["PIN_6", "PIN_7", "PIN_8", "PIN_9"]
-col_pins = ["PIN_19", "PIN_20", "PIN_21"]
-
-# RMK uses col2row as the default matrix diode direction, if you want to use a row2col matrix, add `row2col = true`
-# row2col = true
+# Input and output pins are mandatory
+# input_pins = rows (6), output_pins = cols (15) — matches col2row diode direction
+# NOTE: diode_direction (col2row) is set via RMK's feature gate at compile time,
+# not here in the TOML — confirm the exact feature flag name in your Cargo.toml
+input_pins = ["PIN_15", "PIN_11", "PIN_10", "PIN_8", "PIN_1", "PIN_22"]
+output_pins = ["PIN_0", "PIN_9", "PIN_7", "PIN_12", "PIN_13", "PIN_3", "PIN_14", "PIN_20", "PIN_17", "PIN_6", "PIN_16", "PIN_5", "PIN_4", "PIN_2", "PIN_21"]
 
 [layout]
-rows = 4
-cols = 3
-layers = 2
+rows = 6
+cols = 15
+layers = 3
 keymap = [
     [
-        ["A", "B", "C"],
-        ["Kc1", "Kc2", "Kc3"],
-        ["LCtrl", "MO(1)", "LShift"],
-        ["OSL(1)", "LT(2, Kc9)", "LM(1, LShift | LGui)"]
+        ["Escape", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "Delete", "No"],
+        ["Grave", "Kc1", "Kc2", "Kc3", "Kc4", "Kc5", "Kc6", "Kc7", "Kc8", "Kc9", "Kc0", "Minus", "Equal", "Backspace", "_"],
+        ["Tab", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "LeftBracket", "RightBracket", "Backslash", "_"],
+        ["CapsLock", "A", "S", "D", "F", "G", "H", "J", "K", "L", "Semicolon", "Quote", "Enter", "_", "_"],
+        ["LShift", "Z", "X", "C", "V", "B", "N", "M", "Comma", "Dot", "Slash", "RShift", "_", "Up", "_"],
+        ["LCtrl", "LGui", "LAlt", "Space", "_", "_", "_", "_", "_", "RAlt", "MO(1)", "RCtrl", "Left", "Down", "Right"]
     ],
     [
-        ["_", "TT(1)", "TG(2)"],
-        ["_", "_", "_"],
-        ["_", "_", "_"],
-        ["_", "_", "_"]
+        ["No", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_"],
+        ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_"],
+        ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_"],
+        ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_"],
+        ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "RGB_MODE_PREVIOUS", "RGB_MODE_NEXT"],
+        ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "RGB_MODE_PREVIOUS", "RGB_BRIGHTNESS_DOWN", "RGB_BRIGHTNESS_UP"]
     ],
+    [
+        ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_"],
+        ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_"],
+        ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_"],
+        ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_"],
+        ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_"],
+        ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_"]
+    ]
 ]
+
+[light]
+rgb_enabled = true
+pin = "PIN_26"        # The pin wired to your first LED's DIN pad
+chain_length = 81     # Total number of per-key LEDs on the board
+
+[storage]
+enabled = true
+num_sectors = 32
+
+# TODO: encoder and display (OLED) config — the example .toml didn't include
+# these sections, so field names below are inferred from earlier drafts and
+# need to be checked against RMK's actual schema/docs before building
+[[encoder]]
+pin_a = "PIN_18"
+pin_b = "PIN_19"
+
+[display]
+enabled = true
+driver = "ssd1306"
+i2c_scl = "PIN_28"
+i2c_sda = "PIN_27"
+width = 128
+height = 64
